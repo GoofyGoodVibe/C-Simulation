@@ -1,79 +1,74 @@
-# C 2D Simulation Environment (No CMake)
+# 🌌 Boids & Conway's Game of Life Simulation
 
-This project is set up for **C + SDL3** with a very small build flow.
+A minimal, high-performance 2D simulation environment written in pure C using **SDL3**. This project features implementations of Craig Reynolds' **Boids flocking algorithm** and John Conway's **Game of Life**.
 
-## Why I chose SDL3 instead of SDL2
+This project serves as a personal archive for learning purposes. **I am actively learning C and am not an expert.** AI was not used to write any of the source code. Instead, AI acts as a dedicated teacher to help me break through coding roadblocks and conceptually understand complex topics.
 
-- SDL3 is the current generation of SDL and is where active API evolution is happening.
-- You are starting a new project (boids, Conway, particle-life), so there is no legacy lock-in.
-- For pure 2D simulation work, SDL3 provides everything needed now and keeps the project future-facing.
+This repository is public for educational use, but the repository is strictly **read-only**.
 
-SDL2 is still good and stable, but for a fresh codebase SDL3 is the better long-term default.
+---
 
-## Project layout
+## 🛠️ Tech Stack & Architecture
 
-- `src/main.c` minimal SDL app and render loop
-- `build.bat` compile script
-- `run.bat` build then run
-- `bin/` compiled output
+*   **Language:** Pure C (optimized for raw speed and low memory footprint).
+*   **Graphics:** [SDL3](https://github.com/libsdl-org/SDL) (chosen over SDL2 to ensure modern API usage and long-term future-proofing).
+*   **Build System:** Single-file batch scripts (`.bat`). **No CMake** or complex meta-build engines required.
 
-## 1) Install toolchain and SDL3 (Windows, MSYS2)
-
-1. Install MSYS2 from https://www.msys2.org/
-2. Open **MSYS2 UCRT64** shell and run:
-
-```bash
-pacman -Syu
-pacman -S --needed mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-pkgconf mingw-w64-ucrt-x86_64-sdl3
+### Project Layout
+```text
+├── bin/          # Compiled executable outputs
+├── src/
+│   └── main.c    # Application entry point & core SDL3 render loop
+├── include/      # Application Header files
+├── build.bat     # Windows compilation script
+└── run.bat       # Wrapper script to build and execute sequentially
 ```
 
-3. Either:
-- Keep using the UCRT64 shell, or
-- Add `C:\msys64\ucrt64\bin` to your Windows PATH so `gcc` and `pkg-config` are available in PowerShell/CMD.
+---
 
-## 2) Build
+## 🚀 Getting Started (Windows)
 
-From project root:
+Follow these steps to set up your toolchain, link SDL3, and run the simulation.
 
+### 1. Install Toolchain and SDL3
+1. Download and run the setup installer from the [MSYS2 Official Website](https://www.msys2.org/).
+2. Open the **MSYS2 UCRT64** terminal environment.
+3. Update packages and install GCC, pkg-config, and SDL3 by running:
+   ```bash
+   pacman -Syu
+   pacman -S --needed mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-pkgconf mingw-w64-ucrt-x86_64-sdl3
+   ```
+4. *(Optional)* Add `C:\msys64\ucrt64\bin` to your Windows system environment **PATH** variable if you wish to run `gcc` and `pkg-config` directly from standard PowerShell or CMD windows.
+
+### 2. Build the Project
+Open your terminal at the project root directory and run the compilation script:
 ```bat
 build.bat
 ```
 
-## 3) Run
-
+### 3. Run the Simulation
+Execute the runtime wrapper script to launch the application:
 ```bat
 run.bat
 ```
 
-## What to add later to keep things working
+---
 
-### Add more C files
+## 🔧 Project Maintenance & Extensions
 
-- Put new `.c` files inside `src/`.
-- `build.bat` already compiles `src\*.c`, so no script changes are needed.
+Because this build environment relies entirely on `build.bat` as its single source of truth, upgrading the simulation is highly straightforward:
 
-### Add headers
+*   **Adding Source Files:** Place any new `.c` files directly inside the `src/` directory. The script compiles `src\*.c` automatically without any script alterations.
+*   **Adding Header Directories:** If you decide to decouple your headers into a standalone `include/` directory, append the `-Iinclude` compiler flag to your `gcc` invocation string inside `build.bat`.
+*   **Linking Extra Libraries:** For external tools supporting `pkg-config`, append them to the existing configuration flag line:
+    ```bat
+    pkg-config --cflags --libs sdl3 your_additional_library_here
+    ```
 
-- Put your headers in `src/` or create an `include/` folder.
-- If you create `include/`, add `-Iinclude` to the `gcc` line in `build.bat`.
+---
 
-### Add another library
+## 🔒 Repository & AI Notice
 
-- If the library supports `pkg-config`, extend this line in `build.bat`:
-
-```bat
-pkg-config --cflags --libs sdl3
-```
-
-Example:
-
-```bat
-pkg-config --cflags --libs sdl3 some_other_lib
-```
-
-- If a library does not use `pkg-config`, add its include/lib flags manually to the `gcc` command.
-
-## Notes
-
-- This setup intentionally avoids CMake and other build systems.
-- Keep `build.bat` as the single source of build options.
+*   **AI Usage**: AI assistance was utilized exclusively to clean up and format this Markdown README, as well as serve as an interactive programming tutor to navigate conceptual logic hurdles. **100% of the simulation source code is handwritten** as part of my C learning journey.
+*   **Contributions:** Pull Requests and Issues are permanently disabled. This project serves purely as a personal experiment archive.
+*   **Security:** This repository is confirmed safe. It contains no API credentials, private infrastructure tokens, or sensitive user environment keys.

@@ -1,10 +1,11 @@
 #include <SDL3/SDL.h>
-#include "assets.h"
-#include "particle.h"
-#include "general.h"
 #include <stdlib.h>
 #include <time.h>
 
+#include "assets.h"
+#include "particle.h"
+#include "general.h"
+#include "simtimer.h"
 
 int main(void)
 {
@@ -37,13 +38,18 @@ int main(void)
     // initialize particle system
     ParticleSystem particle_system = particle_system_init();
     particles_setup(WINDOW_WIDTH, WINDOW_HEIGHT, &particle_system);
-
+    float delta_time = 1.0f / 60.0f;
 
     // Main loop
     int running = 1;
-    float delta_time = 1.0f / 60.0f; // Assuming 60 FPS
+    SDL_Event event;
+
+    Timer_Init();
+
     while (running) {
-        SDL_Event event;
+        
+        Timer_Update();
+        
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
                 running = 0;
@@ -60,6 +66,8 @@ int main(void)
         // Draw Everything
         Draw(renderer, &particle_system, &particle_asset);
         SDL_RenderPresent(renderer);
+
+        SDL_Log("Delta Time: %.6f seconds", g_DeltaTime);
     }
 
     // Destroy Assets and Textures

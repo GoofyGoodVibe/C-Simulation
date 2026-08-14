@@ -43,7 +43,7 @@ static const float SEPARATION_STRENGTH = 0.85f;
 // Maximum force applied to any boid per frame (prevents extreme snapping)
 // Range: 50.0 to 500.0
 // Higher = boids can change direction more sharply
-static const float MAX_FORCE = 150.0f;
+static const float MAX_FORCE = 40.0f;
  
 // Maximum speed boids can travel
 // Range: 2.0 to 20.0

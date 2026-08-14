@@ -57,7 +57,7 @@ int main(void)
         }
 
         // Update Everything before Render
-        Update(&particle_system, delta_time, WINDOW_WIDTH, WINDOW_HEIGHT);
+        Update(&particle_system, g_DeltaTime, WINDOW_WIDTH, WINDOW_HEIGHT);
 
         // Clear Renderer
         SDL_SetRenderDrawColor(renderer, 18, 18, 22, 255);

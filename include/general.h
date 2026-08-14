@@ -17,6 +17,7 @@ void Update(ParticleSystem *particle_system, float delta_time, int window_width,
 void Draw(SDL_Renderer *renderer, ParticleSystem *particle_system, Asset *particle_asset);
 void StartUp();
 
+
 // =============================================================================
 // STEERING FORCES (How boids interact with neighbors)
 // =============================================================================
@@ -24,17 +25,17 @@ void StartUp();
 // How strongly boids are attracted to the center of their flock
 // Range: 0.0 (no cohesion) to 1.0 (very strong)
 // Higher = boids cluster tighter together
-static const float COHESION_STRENGTH = 0.04f;
+static const float COHESION_STRENGTH = 0.25f;
  
 // How much boids try to align their velocity with neighbors
 // Range: 0.0 (ignore neighbors) to 1.0 (copy neighbor velocity perfectly)
 // Higher = more uniform flock behavior, lower = snaking/weaving variations
-static const float ALIGNMENT_STRENGTH = 0.15f;
+static const float ALIGNMENT_STRENGTH = 0.65f;
  
 // How strongly boids push away from each other to avoid crowding
 // Range: 0.0 (no separation) to 2.0 (very aggressive)
 // Higher = boids maintain more personal space
-static const float SEPARATION_STRENGTH = 0.85f;
+static const float SEPARATION_STRENGTH = 2.5f;
  
 // =============================================================================
 // VELOCITY & FORCE LIMITS
@@ -43,12 +44,12 @@ static const float SEPARATION_STRENGTH = 0.85f;
 // Maximum force applied to any boid per frame (prevents extreme snapping)
 // Range: 50.0 to 500.0
 // Higher = boids can change direction more sharply
-static const float MAX_FORCE = 40.0f;
+static const float MAX_FORCE = 500.0f;
  
 // Maximum speed boids can travel
 // Range: 2.0 to 20.0
 // Higher = faster, more chaotic movement; lower = sluggish movement
-static const float MAX_SPEED = 8.0f;
+static const float MAX_SPEED = 120.0f;
  
 // =============================================================================
 // FIELD OF VIEW (Perception constraints)
@@ -99,7 +100,7 @@ static const float MOMENTUM_THRESHOLD = 40.0f;
 // ~120:    Smooth, natural feel (recommended)
 // ~150+:   Zippy, energetic feel
 // Higher = boids maintain speed longer; lower = faster deceleration
-static const float MOMENTUM_ACCELERATION = 120.0f;
+static const float MOMENTUM_ACCELERATION = 250.0f;
  
 // Minimum speed multiplier for variation between particles
 // Creates "fast" and "slow" boids in the flock

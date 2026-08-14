@@ -1,9 +1,11 @@
-#include "particle.h"
-#include "threadpool.h"
-#include "general.h"
 #include <math.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
+#include "particle.h"
+#include "threadpool.h"
+#include "general.h"
+#include "simtimer.h"
 
 static SyncCounter behavior_sync = {0, NULL, NULL, 0};
 static SyncCounter collision_sync = {0, NULL, NULL, 0};
@@ -175,6 +177,7 @@ void behavior_worker(void *arg) {
     int end_idx = task_data->end_idx;
     int window_width = task_data->window_width;
     int window_height = task_data->window_height;
+    float inv_dt = (g_DeltaTime > 0.0f) ? 1.0f / g_DeltaTime : 1.0f;
  
     // Process assigned particle range
     for (int i = start_idx; i < end_idx; i++) {
@@ -226,12 +229,12 @@ void behavior_worker(void *arg) {
         if (coh_count > 0) { cx /= coh_count; cy /= coh_count; }
         if (alg_count > 0) { jx /= alg_count; jy /= alg_count; }
  
-        a->coh_x = cx * COHESION_STRENGTH;
-        a->coh_y = cy * COHESION_STRENGTH;
-        a->alg_x = jx * ALIGNMENT_STRENGTH;
-        a->alg_y = jy * ALIGNMENT_STRENGTH;
-        a->sep_x = sx * SEPARATION_STRENGTH;
-        a->sep_y = sy * SEPARATION_STRENGTH;
+        a->coh_x = cx * COHESION_STRENGTH * inv_dt;
+        a->coh_y = cy * COHESION_STRENGTH * inv_dt;
+        a->alg_x = jx * ALIGNMENT_STRENGTH * inv_dt;
+        a->alg_y = jy * ALIGNMENT_STRENGTH * inv_dt;
+        a->sep_x = sx * SEPARATION_STRENGTH * inv_dt;
+        a->sep_y = sy * SEPARATION_STRENGTH * inv_dt;
  
         float total_fx = a->coh_x + a->alg_x + a->sep_x;
         float total_fy = a->coh_y + a->alg_y + a->sep_y;

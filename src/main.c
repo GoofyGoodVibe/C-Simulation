@@ -1,11 +1,17 @@
 #include <SDL3/SDL.h>
-#include <stdlib.h>
-#include <time.h>
 
-#include "assets.h"
-#include "particle.h"
-#include "general.h"
-#include "simtimer.h"
+#include "update.h"
+#include "init.h"
+
+
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
+
+
+
+
+
+
 
 int main(void)
 {
@@ -16,66 +22,8 @@ int main(void)
         return 1;
     }
 
-    SDL_Window *window = context.window;
-    SDL_Renderer *renderer = context.renderer;
-    
-    StartUp(); // Initialize thread pool and particle threading
+    Run_Update_Loop(context);
 
-    // create a random seed for particle generation
-    srand((unsigned int)time(NULL));
 
-    // Create particle asset and texture
-    Asset particle_asset = assets_load("particle", "assets/images/particle.bmp", renderer);
-
-    if(!particle_asset.texture) {
-        SDL_Log("Failed to load particle asset. Exiting.");
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-
-    // initialize particle system
-    ParticleSystem particle_system = particle_system_init();
-    particles_setup(WINDOW_WIDTH, WINDOW_HEIGHT, &particle_system);
-    float delta_time = 1.0f / 60.0f;
-
-    // Main loop
-    int running = 1;
-    SDL_Event event;
-
-    Timer_Init();
-
-    while (running) {
-        
-        Timer_Update();
-        
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
-                running = 0;
-            }
-        }
-
-        // Update Everything before Render
-        Update(&particle_system, g_DeltaTime, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-        // Clear Renderer
-        SDL_SetRenderDrawColor(renderer, 18, 18, 22, 255);
-        SDL_RenderClear(renderer);
-
-        // Draw Everything
-        Draw(renderer, &particle_system, &particle_asset);
-        SDL_RenderPresent(renderer);
-
-        SDL_Log("Delta Time: %.6f seconds", g_DeltaTime);
-    }
-
-    // Destroy Assets and Textures
-    assets_unload(&particle_asset);
-
-    // Clean up and exit
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
     return 0;
 }

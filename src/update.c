@@ -22,7 +22,7 @@ void Run_Update_Loop(SDLContext context) {
 
         // Update logic here
         // ...
-        update_flock(&flock, g_DeltaTime);
+        update_flock(&flock);
 
         // Clear Renderer
         SDL_SetRenderDrawColor(context.renderer, 18, 18, 22, 255);

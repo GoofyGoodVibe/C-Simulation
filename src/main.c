@@ -2,14 +2,7 @@
 
 #include "update.h"
 #include "init.h"
-
-
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
-
-
-
-
+#include "general.h"
 
 
 

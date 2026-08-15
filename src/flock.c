@@ -1,7 +1,6 @@
 #include <SDL3/SDL.h>
 
 #include "flock.h"
-#include "boid.h"
 
 void initialize_flock(Flock *flock, int count) {
     flock->count = count;
@@ -11,9 +10,9 @@ void initialize_flock(Flock *flock, int count) {
         }
 }
 
-void update_flock(Flock *flock, float delta_time) {
+void update_flock(Flock *flock) {
     for (int i = 0; i < flock->count; i++) {
-        update_boid(&flock->boids[i], delta_time);
+        update_boid(&flock->boids[i], flock);
     }
 }
 

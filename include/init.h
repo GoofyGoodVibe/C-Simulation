@@ -2,10 +2,10 @@
 #define INIT_H
 
 #include <SDL3/SDL.h>
-
 #include "assets.h"
 
-typedef struct {
+// --- FIXED: Added SDLContext tag right here ---
+typedef struct SDLContext {
     SDL_Window *window;
     SDL_Renderer *renderer;
     Asset particle_asset; 

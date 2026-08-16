@@ -10,9 +10,9 @@ void initialize_flock(Flock *flock, int count) {
         }
 }
 
-void update_flock(Flock *flock) {
+void update_flock(Flock *flock, ObstacleManager *obstacle_mgr) {
     for (int i = 0; i < flock->count; i++) {
-        update_boid(&flock->boids[i], flock);
+        update_boid(&flock->boids[i], flock, obstacle_mgr);
     }
 }
 

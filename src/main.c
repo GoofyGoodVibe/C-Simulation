@@ -4,6 +4,9 @@
 #include "init.h"
 #include "general.h"
 
+int g_IsLeftMouseDown = 0;
+Vector2D g_MousePosition = {0.0f, 0.0f};
+
 
 
 int main(void)

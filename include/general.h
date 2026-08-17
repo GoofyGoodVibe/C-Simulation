@@ -15,8 +15,8 @@ typedef struct {
 #define Boid_Amount 100
 
 // 1. Balanced Behavior Multipliers
-#define Boid_Seperation_Weight 0.8f   // Higher priority to prevent crowding
-#define Boid_Alignment_Weight  1.5f   // Good group flow matching
+#define Boid_Separation_Weight 2.0f   // Higher priority to prevent crowding
+#define Boid_Alignment_Weight  0.8f   // Good group flow matching
 #define Boid_Cohesion_Weight   0.3f   // Keeps them pulling back toward the group
 
 // 2. Realistic Physics Capabilities
@@ -24,15 +24,15 @@ typedef struct {
 #define Boid_Min_Speed         80.0f   // Minimum speed to avoid stalling
 #define Boid_Max_Force         150.0f  // Smooth turning power (keep this lower than Max_Speed!)
 #define Boid_Mass              1.0f
-#define Boid_Perception_Radius 100.0f  // Lowered slightly so they don't track boids across the entire map
-#define Boid_Separation_Radius 30.0f   // Slightly wider comfort zone to avoid overlaps
-#define Boid_Vision_Angle      180.0f
+#define Boid_Perception_Radius 120.0f  // Lowered slightly so they don't track boids across the entire map
+#define Boid_Separation_Radius 70.0f   // Slightly wider comfort zone to avoid overlaps
+#define Boid_Vision_Angle      270.0f
 
 // Obstacle Core Tuning Parameters
 #define Boid_Obstacle_Weight 2.5f    // High priority so they break flocking lines to save themselves
 #define Boid_Obstacle_Buffer 40.0f   // Buffer zone (in pixels) outside the obstacle radius where boids start turning
 #define Boid_Default_Obstacle_Radius 30.0f // Size of obstacle dropped via right click
-
+#define Boid_Boundary_Force 12.0f
 
 #define Boid_Mouse_Seek_Weight 1.2f  // Gentle pull so they don't lose their bird-like string structures
 extern int g_IsLeftMouseDown;

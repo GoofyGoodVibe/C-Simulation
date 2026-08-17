@@ -1,0 +1,25 @@
+# BOIDS DEVELOPMENT TO-DO LIST
+
+[ ] FIX SEPARATION BEHAVIOR
+    - Check if distance between boids is less than the minimum allowed distance
+    - Apply a strong repulsive force ("get away from me") when boids crowd together
+    - Ensure boids separate correctly instead of just lining up
+
+[ ] ADD INTERACTIVE OBSTACLES
+    - Implement a dynamic obstacle sizing mechanic
+    - Scale up the obstacle radius the longer the right mouse button is held down
+
+[ ] CONTROL PANEL & UI FEATURES
+    - Create a user interface with interactive sliders to tweak simulation parameters on the fly
+    - Add checkboxes to toggle features like debug visuals (e.g., perception radii, vectors)
+    - Implement a restart simulation button to reset the environment instantly
+
+[ ] OPTIMIZE CORE PERFORMANCE
+    - Verify the new all-in-one flocking function works smoothly
+    - Re-implement multi-threading to handle large boid counts efficiently
+
+[ ] IMPLEMENT MULTI-FLOCK INTERACTIONS
+    - Create distinct, separate flocks
+    - Add behavior rules for different flocks reacting to each other
+    - Program a predator flock to hunt the prey
+    - Program the prey flock to actively flee from predators

@@ -21,7 +21,8 @@ Boid boid_create(float x, float y, float size, float r, float g, float b, float 
 // and add delta_time so your physics integration works.
 void update_boid(Boid *boid, Flock *flock, ObstacleManager *obstacle_mgr);
 void draw_boid(SDLContext *context, Boid *boid);
-Vector2D calculate_seperation(Boid *boid, Flock *flock);
+Vector2D calculate_Forces(Boid* boid, Flock *flock, ObstacleManager *obstacle_mgr);
+Vector2D calculate_separation(Boid *boid, Flock *flock);
 Vector2D calculate_alignment(Boid *boid, Flock *flock);
 Vector2D calculate_cohesion(Boid *boid, Flock *flock);
 Vector2D calculate_boundaries(Boid *boid);

@@ -12,12 +12,12 @@ typedef struct {
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 #define margin 25.0f
-#define Boid_Amount 100
+#define Boid_Amount 1000
 
 // 1. Balanced Behavior Multipliers
-#define Boid_Separation_Weight 2.0f   // Higher priority to prevent crowding
-#define Boid_Alignment_Weight  0.8f   // Good group flow matching
-#define Boid_Cohesion_Weight   0.3f   // Keeps them pulling back toward the group
+#define Boid_Separation_Weight 0.6f   // Higher priority to prevent crowding
+#define Boid_Alignment_Weight  0.5f   // Good group flow matching
+#define Boid_Cohesion_Weight   0.03f   // Keeps them pulling back toward the group
 
 // 2. Realistic Physics Capabilities
 #define Boid_Max_Speed         200.0f  // Pixels per second forward velocity
@@ -26,7 +26,8 @@ typedef struct {
 #define Boid_Mass              1.0f
 #define Boid_Perception_Radius 120.0f  // Lowered slightly so they don't track boids across the entire map
 #define Boid_Separation_Radius 70.0f   // Slightly wider comfort zone to avoid overlaps
-#define Boid_Vision_Angle      270.0f
+#define Boid_Separation_Threshold 30.0f // Closet a boid can get before separation force is multiplied by a higher factor to push them away
+#define Boid_Vision_Angle      140.0f
 
 // Obstacle Core Tuning Parameters
 #define Boid_Obstacle_Weight 2.5f    // High priority so they break flocking lines to save themselves

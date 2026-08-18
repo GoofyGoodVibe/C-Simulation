@@ -126,8 +126,18 @@ Vector2D calculate_Forces(Boid* boid, Flock *flock, ObstacleManager *obstacle_mg
 
                 if(distance < Boid_Separation_Radius){
                     // separation
-                    Vector2D escape_vector = vec_mult(to_neighbor, 1.0f / distance); 
-                    separation_steering_force = vec_add(separation_steering_force, escape_vector);
+                    
+                    // Check to see if the other boid is too close and within the separation radius
+                    if(distance < Boid_Separation_Threshold){
+                        // If the other boid is too close, apply a stronger separation force
+                        Vector2D escape_vector = vec_mult(to_neighbor, 1.0f / distance); 
+                        escape_vector = vec_mult(escape_vector, -2.0f); // Stronger push away
+                        separation_steering_force = vec_add(separation_steering_force, escape_vector);
+                    } else {
+                        Vector2D escape_vector = vec_mult(to_neighbor, 1.0f / distance); 
+                        separation_steering_force = vec_add(separation_steering_force, escape_vector);
+                    }
+
                     separation_count++;
                 }
             }
@@ -187,141 +197,6 @@ Vector2D calculate_Forces(Boid* boid, Flock *flock, ObstacleManager *obstacle_mg
 
     return total_force;
 
-}
-
-Vector2D calculate_separation(Boid *boid, Flock *flock) {
-    Vector2D steering = {0.0f, 0.0f};
-    int neighbor_count = 0;
-
-    // Pre-calculate the boid's normalized heading direction vector
-    Vector2D heading = {0.0f, 0.0f};
-    float current_speed = vec_mag(boid->velocity);
-    if (current_speed > 0.0f) {
-        heading = vec_mult(boid->velocity, 1.0f / current_speed);
-    }
-
-    // Cosine of half the vision angle: cos(270 / 2) = cos(135) ≈ -0.7071f
-    float vision_threshold = cosf((Boid_Vision_Angle / 2.0f) * (M_PI / 180.0f));
-
-    for (int i = 0; i < flock->count; i++) {
-        Boid *other = &flock->boids[i];
-        if (boid == other) continue; 
-        
-        Vector2D difference = vec_sub(boid->position, other->position);
-        float distance = vec_mag(difference);
-        
-        if (distance < Boid_Separation_Radius && distance > 0.0f) {
-            // Calculate a vector pointing from our position toward the neighbor
-            Vector2D to_neighbor = vec_mult(difference, -1.0f); // Invert difference vector
-            Vector2D dir_to_neighbor = vec_mult(to_neighbor, 1.0f / distance); // Normalize it
-            
-            // Vision Check: Is neighbor inside the vision cone?
-            if (vec_dot(heading, dir_to_neighbor) >= vision_threshold) {
-                Vector2D escape_vector = vec_mult(difference, 1.0f / distance); 
-                steering = vec_add(steering, escape_vector);
-                neighbor_count++;
-            }
-        }
-    }
-
-    if (neighbor_count > 0) {
-        steering = vec_mult(steering, 1.0f / neighbor_count); 
-        float mag = vec_mag(steering);
-        if (mag > 0.0f) {
-            steering = vec_mult(steering, 1.0f / mag);       
-            steering = vec_mult(steering, Boid_Max_Speed);   
-        }
-        steering = vec_sub(steering, boid->velocity); 
-        steering = vec_limit(steering, Boid_Max_Force); 
-    }
-    return steering;
-}
-
-Vector2D calculate_alignment(Boid *boid, Flock *flock) {
-    Vector2D alignment_force = {0.0f, 0.0f};
-    int neighbor_count = 0;
-
-    Vector2D heading = {0.0f, 0.0f};
-    float current_speed = vec_mag(boid->velocity);
-    if (current_speed > 0.0f) {
-        heading = vec_mult(boid->velocity, 1.0f / current_speed);
-    }
-    float vision_threshold = cosf((Boid_Vision_Angle / 2.0f) * (M_PI / 180.0f));
-
-    for (int i = 0; i < flock->count; i++) {
-        Boid *other = &flock->boids[i];
-        if (boid == other) continue; 
-        
-        Vector2D difference = vec_sub(other->position, boid->position);
-        float distance = vec_mag(difference);
-        
-        if (distance < Boid_Perception_Radius && distance > 0.0f) {
-            Vector2D dir_to_neighbor = vec_mult(difference, 1.0f / distance); // Normalize
-            
-            // Vision Check
-            if (vec_dot(heading, dir_to_neighbor) >= vision_threshold) {
-                alignment_force = vec_add(alignment_force, other->velocity);
-                neighbor_count++;
-            }
-        }
-    }
-
-    Vector2D steering = {0.0f, 0.0f};
-    if (neighbor_count > 0) {
-        alignment_force = vec_mult(alignment_force, 1.0f / neighbor_count); 
-        float mag = vec_mag(alignment_force);
-        if (mag > 0.0f) {
-            alignment_force = vec_mult(alignment_force, 1.0f / mag);       
-            alignment_force = vec_mult(alignment_force, Boid_Max_Speed);   
-        }
-        steering = vec_sub(alignment_force, boid->velocity); 
-        steering = vec_limit(steering, Boid_Max_Force); 
-    }
-    return steering;
-}
-
-Vector2D calculate_cohesion(Boid *boid, Flock *flock) {
-    Vector2D center_of_mass = {0.0f, 0.0f};
-    int neighbor_count = 0;
-
-    Vector2D heading = {0.0f, 0.0f};
-    float current_speed = vec_mag(boid->velocity);
-    if (current_speed > 0.0f) {
-        heading = vec_mult(boid->velocity, 1.0f / current_speed);
-    }
-    float vision_threshold = cosf((Boid_Vision_Angle / 2.0f) * (M_PI / 180.0f));
-
-    for (int i = 0; i < flock->count; i++) {
-        Boid *other = &flock->boids[i];
-        if (boid == other) continue; 
-        
-        Vector2D difference = vec_sub(other->position, boid->position);
-        float distance = vec_mag(difference);
-        
-        if (distance < Boid_Perception_Radius && distance > 0.0f) {
-            Vector2D dir_to_neighbor = vec_mult(difference, 1.0f / distance); // Normalize
-            
-            // Vision Check
-            if (vec_dot(heading, dir_to_neighbor) >= vision_threshold) {
-                center_of_mass = vec_add(center_of_mass, other->position);
-                neighbor_count++;
-            }
-        }
-    }
-
-    Vector2D steering = {0.0f, 0.0f};
-    if (neighbor_count > 0) {
-        center_of_mass = vec_mult(center_of_mass, 1.0f / neighbor_count); 
-        Vector2D desired_velocity = vec_sub(center_of_mass, boid->position); 
-        float mag = vec_mag(desired_velocity);
-        if (mag > 0.0f) {
-            desired_velocity = vec_mult(desired_velocity, 1.0f / mag);       
-            desired_velocity = vec_mult(desired_velocity, Boid_Max_Speed);   
-        }
-        steering = vec_sub(desired_velocity, boid->velocity); 
-        steering = vec_limit(steering, Boid_Max_Force); 
-    }
-    return steering;
 }
 
 Vector2D calculate_boundaries(Boid *boid) {
